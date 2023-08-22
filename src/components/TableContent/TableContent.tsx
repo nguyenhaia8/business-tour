@@ -9,8 +9,8 @@ import {
   TableContainer,
   Flex,
 } from '@chakra-ui/react'
-import { useMemo } from 'react'
-
+import {useMemo} from 'react'
+import styles from '@/styles/User.module.scss'
 interface TableProps {
   title: string
   listItem: Item[]
@@ -24,25 +24,25 @@ interface Item {
 }
 
 export const TableContent = (props: TableProps) => {
-  const { title, listItem } = props
+  const {title, listItem} = props
   const totalScore = useMemo(() => {
     const total = listItem.reduce((acc, item) => acc + item.score, 0)
     return total
   }, [listItem])
   const formatDate = (time: number) => {
     const date = new Date(time)
-    return date.toDateString()
+    return date.toLocaleString()
   }
   return (
     <Box>
       <Flex
         gap="5px"
-        background="#fff6ed"
         width="150px"
         padding="10px"
         borderRadius="5px"
         flexDirection="column"
         marginBottom="5px"
+        className={styles['glass-morphism']}
       >
         <Box fontWeight="bold" textAlign="center" fontSize="30px">
           {totalScore}
@@ -55,8 +55,12 @@ export const TableContent = (props: TableProps) => {
         </Flex>
       </Flex>
 
-      <TableContainer padding="30px" background="#d6f5e2" borderRadius="10px">
-        <Table variant="striped" colorScheme="whatsapp">
+      <TableContainer
+        padding="30px"
+        borderRadius="10px"
+        className={styles['glass-morphism']}
+      >
+        <Table>
           <Thead>
             <Tr>
               <Th width="fit-content" whiteSpace="nowrap" fontWeight="bold">
