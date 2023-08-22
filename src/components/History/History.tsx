@@ -7,6 +7,7 @@ import {
   Th,
   Td,
   TableContainer,
+  Flex,
 } from '@chakra-ui/react'
 import {CheckCircleIcon} from '@chakra-ui/icons'
 import {UserName} from '../UserName'
@@ -25,7 +26,12 @@ export const History = () => {
     async function fetchData() {
       try {
         const ledgerResp = await axiosInstance.get('history')
-        setData(ledgerResp.data)
+        const data = ledgerResp.data.sort((a: any, b: any) => {
+          if (a.date > b.date) return -1
+          if (b.date > a.date) return 1
+          return 0
+        })
+        setData(data)
       } catch (error) {
         console.log('🚀 ~ file: History.tsx:27 ~ fetchData ~ error:', error)
       }
@@ -83,15 +89,17 @@ export const History = () => {
                     <UserName value={item.rank4}></UserName>
                   </Td>
                   <Td width="fit-content" whiteSpace="break-spaces">
-                    {item.isDouble ? (
-                      <CheckCircleIcon
-                        color="#4CAF50"
-                        w={6}
-                        h={6}
-                      ></CheckCircleIcon>
-                    ) : (
-                      ''
-                    )}
+                    <Flex justifyContent="center">
+                      {item.isDouble ? (
+                        <CheckCircleIcon
+                          color="#4CAF50"
+                          w={6}
+                          h={6}
+                        ></CheckCircleIcon>
+                      ) : (
+                        ''
+                      )}
+                    </Flex>
                   </Td>
                 </Tr>
               ))}

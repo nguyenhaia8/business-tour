@@ -1,10 +1,12 @@
-import {Box, Image, Flex} from '@chakra-ui/react'
+import {Image} from '@chakra-ui/react'
 import {useEffect, useState} from 'react'
 import styles from '@/styles/UserName.module.scss'
+import {selectUsersState} from '@/store/usersSlice'
+import {useSelector} from 'react-redux'
 interface IUser {
-  name?: string
-  value?: string
-  avt?: string
+  name: string
+  value: string
+  avt: string
 }
 
 const userDefault: IUser = {
@@ -15,23 +17,23 @@ const userDefault: IUser = {
 
 export const UserName = (props: {value: string}) => {
   const [user, setUser] = useState({} as IUser)
-
-  const findUser = (value: string) => {
-    const users = window.__bt_users
-    if (!users) return userDefault
-    if (!users.length) return userDefault
-    const user = users.find((item: IUser) => {
-      return item.value === value
-    })
-    return user
-  }
+  const users = useSelector(selectUsersState)
 
   useEffect(() => {
-    setTimeout(() => {
-      const user = findUser(props.value)
-      setUser(user)
-    }, 300)
-  }, [props.value])
+    const findUser = (value: string): IUser => {
+      if (!users) return userDefault
+      if (!users.length) return userDefault
+
+      const user = users.find((item: IUser) => {
+        return item.value === value
+      })
+
+      if (user) return user
+      return userDefault
+    }
+    const user = findUser(props.value)
+    setUser(user)
+  }, [props.value, users])
 
   return (
     <div className={styles.username}>

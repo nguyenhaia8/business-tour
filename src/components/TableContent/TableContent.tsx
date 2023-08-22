@@ -27,10 +27,17 @@ interface Item {
 
 export const TableContent = (props: TableProps) => {
   const {title, listItem} = props
+  const listItemSorted = listItem.sort((a: any, b: any) => {
+    if (a.date > b.date) return -1
+    if (b.date > a.date) return 1
+    return 0
+  })
+
   const totalScore = useMemo(() => {
     const total = listItem.reduce((acc, item) => acc + item.score, 0)
     return total
   }, [listItem])
+
   const formatDate = (time: number) => {
     const date = new Date(time)
     return date.toLocaleString()
@@ -80,7 +87,7 @@ export const TableContent = (props: TableProps) => {
             </Tr>
           </Thead>
           <Tbody>
-            {listItem?.map((item, index) => (
+            {listItemSorted?.map((item, index) => (
               <Tr
                 key={index}
                 whiteSpace="nowrap"

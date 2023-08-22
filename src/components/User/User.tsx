@@ -12,25 +12,15 @@ import {TriangleDownIcon} from '@chakra-ui/icons'
 import {TableContent} from '../TableContent'
 import {useState, useEffect} from 'react'
 import axiosInstance from '@/services/axiosInstance'
+import {selectUsersState} from '@/store/usersSlice'
+import {useSelector} from 'react-redux'
 import styles from '@/styles/User.module.scss'
-
-interface IUser {
-  name: string
-  value: string
-  avt: string
-}
-
-declare global {
-  interface Window {
-    __bt_users: any
-  }
-}
 
 export const User = () => {
   const [res, setResponse] = useState([] as any[])
   const [filter, setFilter] = useState('')
-  const [users, setUsers] = useState([] as IUser[])
   const [snapshot, setSnapshot] = useState([] as any[])
+  const users = useSelector(selectUsersState)
 
   const handleFilter = (name: string) => {
     if (name === 'All') {
@@ -72,11 +62,7 @@ export const User = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const usersResp = await axiosInstance.get('users')
         const ledgerResp = await axiosInstance.get('ledger')
-        setUsers(usersResp.data)
-        // HOOK
-        window.__bt_users = usersResp.data
         setSnapshot(ledgerResp.data)
         setResponse(ledgerResp.data)
       } catch (error) {
