@@ -13,8 +13,6 @@ import {TableContent} from '../TableContent'
 import {useState, useEffect} from 'react'
 import axiosInstance from '@/services/axiosInstance'
 import styles from '@/styles/User.module.scss'
-import {result} from '@/data/score'
-import {name} from 'assert'
 
 interface IUser {
   name: string
