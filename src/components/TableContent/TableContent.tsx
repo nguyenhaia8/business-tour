@@ -10,6 +10,8 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import {useMemo} from 'react'
+import {UserName} from '../UserName'
+
 import styles from '@/styles/User.module.scss'
 interface TableProps {
   title: string
@@ -79,12 +81,16 @@ export const TableContent = (props: TableProps) => {
           </Thead>
           <Tbody>
             {listItem?.map((item, index) => (
-              <Tr key={index} whiteSpace="nowrap">
+              <Tr
+                key={index}
+                whiteSpace="nowrap"
+                bg={item.score > 0 ? 'green.100' : 'red.100'}
+              >
                 <Td width="fit-content" whiteSpace="break-spaces">
                   {formatDate(item.date)}
                 </Td>
                 <Td width="fit-content" whiteSpace="break-spaces">
-                  {item.debtorName}
+                  <UserName value={item.debtorName}></UserName>
                 </Td>
                 <Td width="fit-content" whiteSpace="break-spaces">
                   {item.rank}

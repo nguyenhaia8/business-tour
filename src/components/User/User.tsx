@@ -6,6 +6,7 @@ import {
   MenuList,
   MenuItem,
   Image,
+  Flex,
 } from '@chakra-ui/react'
 import {TriangleDownIcon} from '@chakra-ui/icons'
 import {TableContent} from '../TableContent'
@@ -13,6 +14,7 @@ import {useState, useEffect} from 'react'
 import axiosInstance from '@/services/axiosInstance'
 import styles from '@/styles/User.module.scss'
 import {result} from '@/data/score'
+import {name} from 'assert'
 
 interface IUser {
   name: string
@@ -20,17 +22,24 @@ interface IUser {
   avt: string
 }
 
+declare global {
+  interface Window {
+    __bt_users: any
+  }
+}
+
 export const User = () => {
   const [res, setResponse] = useState([] as any[])
   const [filter, setFilter] = useState('')
   const [users, setUsers] = useState([] as IUser[])
   const [snapshot, setSnapshot] = useState([] as any[])
+
   const handleFilter = (name: string) => {
     if (name === 'All') {
       setResponse(snapshot)
       setFilter(name)
     } else {
-      const newRes = result.filter((item) => item.name === name)
+      const newRes = snapshot.filter((item) => item.name === name)
       setFilter(name)
       setResponse(newRes)
     }
@@ -68,6 +77,8 @@ export const User = () => {
         const usersResp = await axiosInstance.get('users')
         const ledgerResp = await axiosInstance.get('ledger')
         setUsers(usersResp.data)
+        // HOOK
+        window.__bt_users = usersResp.data
         setSnapshot(ledgerResp.data)
         setResponse(ledgerResp.data)
       } catch (error) {
@@ -77,22 +88,10 @@ export const User = () => {
     fetchData()
   }, [])
   return (
-    <div className={styles['user-main-page']}>
-      <div className={styles['main-box__wrapper']}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          textAlign="center"
-          fontSize="40px"
-          fontWeight="bold"
-          height="100px"
-          marginBottom="30px"
-          color="white"
-        >
-          BUSINESS TOUR LEADERBOARD
-        </Box>
-        <Box paddingX="100px">
+    <>
+      <Box paddingX="100px">
+        <Flex flexDirection="row" alignItems="center">
+          <div className={styles.legend}>Filter by Name:</div>
           <Menu>
             <MenuButton as={Button} rightIcon={<TriangleDownIcon />}>
               {filter ? filter : 'All'}
@@ -131,10 +130,10 @@ export const User = () => {
               ))}
             </MenuList>
           </Menu>
-        </Box>
+        </Flex>
+      </Box>
 
-        {renderTables()}
-      </div>
-    </div>
+      {renderTables()}
+    </>
   )
 }
