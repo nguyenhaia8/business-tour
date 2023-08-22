@@ -38,7 +38,7 @@ export const TableContent = (props: TableProps) => {
       <Flex
         gap="5px"
         background="#fff6ed"
-        width="100px"
+        width="150px"
         padding="10px"
         borderRadius="5px"
         flexDirection="column"
